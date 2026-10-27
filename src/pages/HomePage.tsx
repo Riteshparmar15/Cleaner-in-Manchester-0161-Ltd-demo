@@ -19,6 +19,8 @@ import {
   SmoothHeadline
 } from "../components/MotionWrappers";
 import { appleEase } from "../data/motionConfig";
+import { getAssetUrl } from "../utils/assets";
+
 
 
 export const HomePage: React.FC = () => {
@@ -112,11 +114,12 @@ export const HomePage: React.FC = () => {
                 {/* Decorative Frame */}
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/3] sm:aspect-[16/11]">
                   <img
-                    src="/images/hero_clean_home.jpg"
+                    src={getAssetUrl("/images/hero_clean_home.jpg")}
                     alt="Pristine and sunlit modern Manchester townhouse living space"
                     className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
                     loading="eager"
                   />
+
                   <div className="absolute inset-0 bg-gradient-to-t from-[#142B3B]/40 via-transparent to-transparent"></div>
                 </div>
 

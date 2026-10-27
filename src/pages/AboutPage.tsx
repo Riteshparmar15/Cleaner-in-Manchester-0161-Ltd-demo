@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { HeartHandshake, Sparkles } from "lucide-react";
-
 import { ConversionBanner } from "../components/ConversionBanner";
+import { getAssetUrl } from "../utils/assets";
+
 
 export const AboutPage: React.FC = () => {
   return (
@@ -82,10 +83,11 @@ export const AboutPage: React.FC = () => {
             <div className="lg:col-span-5">
               <div className="relative rounded-3xl overflow-hidden shadow-xl border border-[#E5E9ED] aspect-[4/3]">
                 <img
-                  src="/images/about_supplies.jpg"
+                  src={getAssetUrl("/images/about_supplies.jpg")}
                   alt="High quality eco-friendly cleaning supplies and caddy"
                   className="w-full h-full object-cover"
                 />
+
               </div>
               <p className="mt-3 text-xs text-center text-[#65727E]">
                 Quality materials, methodical care, and pride in clean living spaces.

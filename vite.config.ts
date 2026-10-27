@@ -4,6 +4,8 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/Cleaner-in-Manchester-0161-Ltd-demo/',
   plugins: [react(), tailwindcss()],
 })
+
 
