@@ -10,7 +10,18 @@
   <meta name="description"
     content="Professional, friendly cleaning services across Manchester. Regular home cleaning, deep cleaning, end-of-tenancy, and office cleaning tailored to your schedule." />
 
-  <!-- Open Graph / Meta -->
+    <script>
+      (function(){
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect != location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
+
+    <!-- Open Graph / Meta -->
+
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://0161cleanerinmanchester.co.uk/" />
   <meta property="og:title" content="Cleaner in Manchester (0161) Ltd | Professional Cleaning Services" />
