@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://0161cleanerinmanchester.co.uk/sitemap.xml
