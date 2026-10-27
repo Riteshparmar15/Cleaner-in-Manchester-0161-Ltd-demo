@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #142B3B;
+  --color-navy-dark: #0D1D28;
+  --color-navy-light: #1B384D;
+  --color-navy-subtle: #234761;
+  --color-green: #43A66B;
+  --color-green-dark: #348655;
+  --color-green-light: #EDF7F1;
+  --color-green-subtle: #D2EEDE;
+  --color-light-bg: #F7F9FA;
+  --color-main-text: #202A33;
+  --color-secondary-text: #65727E;
+  --color-border-subtle: #E5E9ED;
+  --font-sans: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  --primary-navy: #142B3B;
+  --primary-green: #43A66B;
+  --bg-light: #F7F9FA;
+  --text-main: #202A33;
+  --text-muted: #65727E;
+  --border-color: #E5E9ED;
+  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Mac-style smooth typography rendering */
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-light-bg);
+  color: var(--color-main-text);
+  overflow-x: hidden;
+  letter-spacing: -0.011em;
+}
+
+/* Apple-style Frosted Glass Acrylic */
+.mac-glass {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(229, 233, 237, 0.8);
+}
+
+.mac-glass-dark {
+  background: rgba(20, 43, 59, 0.88);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Apple-style Card Elevation */
+.mac-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.3s ease;
+}
+
+.mac-card:hover {
+  transform: translateY(-4px) scale(1.008);
+  box-shadow: 0 20px 40px -15px rgba(20, 43, 59, 0.08), 0 0 0 1px rgba(67, 166, 107, 0.25);
+}
+
+/* Mac-style Button Spring Click & Hover */
+.mac-btn {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease, 
+              background-color 0.2s ease;
+}
+
+.mac-btn:hover {
+  transform: translateY(-1.5px) scale(1.02);
+}
+
+.mac-btn:active {
+  transform: translateY(0.5px) scale(0.98);
+}
+
+/* Subtle Floating Breathing Animation for badges / cards */
+@keyframes mac-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-mac-float {
+  animation: mac-float 6s ease-in-out infinite;
+}
+
+/* Shimmer highlight for hero badge */
+@keyframes mac-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.mac-shimmer-badge {
+  background: linear-gradient(90deg, rgba(67, 166, 107, 0.1) 0%, rgba(67, 166, 107, 0.25) 50%, rgba(67, 166, 107, 0.1) 100%);
+  background-size: 200% 100%;
+  animation: mac-shimmer 4s ease-in-out infinite;
+}
+
+/* Custom discreet scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
