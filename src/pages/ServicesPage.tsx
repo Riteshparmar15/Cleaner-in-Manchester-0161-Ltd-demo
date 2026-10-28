@@ -24,7 +24,7 @@ export const ServicesPage: React.FC = () => {
             Our Cleaning Services
           </h1>
           <p className="max-w-xl mx-auto text-sm sm:text-base text-slate-300 leading-relaxed mb-6">
-            Compare services at a glance with upfront pricing, certified DBS-checked cleaners, and supplies included.
+            Compare services at a glance with certified DBS-checked cleaners, flexible scheduling, and supplies included.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">

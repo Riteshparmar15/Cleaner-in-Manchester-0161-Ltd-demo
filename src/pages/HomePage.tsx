@@ -160,13 +160,13 @@ export const HomePage: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
             <div>
               <span className="inline-block px-3 py-1 rounded-full bg-[#14355F]/10 text-[#14355F] text-xs font-black uppercase tracking-wider mb-2">
-                Clear & Upfront Pricing
+                Our Services
               </span>
               <h2 id="services-section-title" className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
                 Select Your Service & Book in 60s
               </h2>
               <p className="mt-1 text-sm text-slate-600">
-                Transparent starting rates with supplies included. Click &ldquo;Book in 60s&rdquo; to reserve your clean.
+                Professional, vetted cleaning specialists with all supplies included. Click &ldquo;Book in 60s&rdquo; to reserve your clean.
               </p>
             </div>
 

@@ -1,25 +1,11 @@
-import React, { useState } from "react";
-import { Star, CheckCircle, SlidersHorizontal, ArrowRight, ShieldCheck, Heart } from "lucide-react";
+import React from "react";
+import { Star, CheckCircle, ArrowRight, ShieldCheck, Heart } from "lucide-react";
 import { googleReviewsData, googleReviewsSummary, type GoogleReview } from "../data/businessInfo";
 import { Link } from "react-router-dom";
 
 export const ReviewsSection: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [viewMode, setViewMode] = useState<"motion" | "grid">("motion");
-
-  const categories = [
-    "All",
-    "Regular Home Cleaning",
-    "End-of-Tenancy Cleaning",
-    "Deep Cleaning"
-  ];
-
-  const filteredReviews = selectedCategory === "All"
-    ? googleReviewsData
-    : googleReviewsData.filter(r => r.serviceType.toLowerCase().includes(selectedCategory.toLowerCase()) || selectedCategory.toLowerCase().includes(r.serviceType.toLowerCase()));
-
   // Duplicate for seamless infinite marquee loop
-  const marqueeItems = [...filteredReviews, ...filteredReviews];
+  const marqueeItems = [...googleReviewsData, ...googleReviewsData];
 
   const renderStars = (count: number) => {
     return (
@@ -168,81 +154,28 @@ export const ReviewsSection: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Filter Toolbar & Motion View Switcher */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-200/80">
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2">
-            <SlidersHorizontal className="w-4 h-4 text-slate-400 mr-1 hidden sm:inline-block" />
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  selectedCategory === cat
-                    ? "bg-[#14355F] text-white shadow-xs"
-                    : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-900"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Mode Switcher */}
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-100 p-1 rounded-xl">
-            <button
-              onClick={() => setViewMode("motion")}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
-                viewMode === "motion"
-                  ? "bg-white text-[#14355F] font-bold shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Motion Carousel
-            </button>
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
-                viewMode === "grid"
-                  ? "bg-white text-[#14355F] font-bold shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Grid View ({filteredReviews.length})
-            </button>
-          </div>
-        </div>
       </div>
 
-      {/* Reviews Display: Motion Ticker OR Grid */}
-      {viewMode === "motion" ? (
-        <div className="relative w-full py-4 space-y-6 overflow-hidden">
-          {/* Subtle gradient edge fade */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
+      {/* Reviews Display: Continuous Motion Carousel */}
+      <div className="relative w-full py-4 space-y-6 overflow-hidden">
+        {/* Subtle gradient edge fade */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none"></div>
 
-          {/* Continuous Row 1 (Forward motion) */}
-          <div className="flex gap-6 animate-marquee">
-            {marqueeItems.map((rev, idx) => renderReviewCard(rev, `row1-${rev.id}-${idx}`))}
-          </div>
-
-          {/* Continuous Row 2 (Reverse motion) */}
-          <div className="flex gap-6 animate-marquee-reverse">
-            {marqueeItems.map((rev, idx) => renderReviewCard(rev, `row2-${rev.id}-${idx}`))}
-          </div>
-
-          <div className="text-center text-xs text-slate-400 mt-2">
-            <span>Hover over any review card to pause motion &bull; Drag or scroll sideways on touch screens</span>
-          </div>
+        {/* Continuous Row 1 (Forward motion) */}
+        <div className="flex gap-6 animate-marquee">
+          {marqueeItems.map((rev, idx) => renderReviewCard(rev, `row1-${rev.id}-${idx}`))}
         </div>
-      ) : (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredReviews.map((rev) => renderReviewCard(rev, `grid-${rev.id}`))}
-          </div>
+
+        {/* Continuous Row 2 (Reverse motion) */}
+        <div className="flex gap-6 animate-marquee-reverse">
+          {marqueeItems.map((rev, idx) => renderReviewCard(rev, `row2-${rev.id}-${idx}`))}
         </div>
-      )}
+
+        <div className="text-center text-xs text-slate-400 mt-2">
+          <span>Hover over any review card to pause motion &bull; Drag or scroll sideways on touch screens</span>
+        </div>
+      </div>
 
       {/* Direct Review Invitation & Booking Link */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
