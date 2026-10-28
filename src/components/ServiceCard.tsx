@@ -8,7 +8,19 @@ interface ServiceCardProps {
   service: ServiceDetail;
 }
 
+// Starting price map displayed once per card in the action row
+const servicePrices: Record<string, string> = {
+  "regular-home-cleaning": "£35",
+  "apartment-cleaning": "£42",
+  "deep-cleaning": "£89",
+  "end-of-tenancy-cleaning": "£120",
+  "office-cleaning": "£49",
+  "end-of-construction-cleaning": "£135"
+};
+
 export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
+  const priceTag = servicePrices[service.slug] || "£45";
+
   return (
     <article className="mac-card flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:border-[#14355F]/40 hover:shadow-lg transition-all group">
       {/* Clean Visual with Cleaner in Action */}
@@ -70,11 +82,20 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
           </div>
         </div>
 
-        {/* Fast Action Button */}
-        <div className="pt-3 border-t border-slate-100">
+        {/* Single Clear Price & Booking Action Row */}
+        <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between gap-3">
+          <div>
+            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              From
+            </span>
+            <span className="text-lg font-black text-slate-900 leading-none">
+              {priceTag}
+            </span>
+          </div>
+
           <Link
             to={`/quote?service=${encodeURIComponent(service.title)}`}
-            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#14355F] hover:bg-[#0E2543] text-white text-xs font-black shadow-md shadow-slate-900/15 mac-btn cursor-pointer transition-all"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#14355F] hover:bg-[#0E2543] text-white text-xs font-black shadow-md shadow-slate-900/15 mac-btn cursor-pointer transition-all hover:scale-[1.02]"
           >
             <span>Book in 60s</span>
             <ArrowRight className="w-3.5 h-3.5" />
