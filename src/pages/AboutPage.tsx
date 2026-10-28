@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Award, ShieldCheck, Clock, CheckCircle2, Phone } from "lucide-react";
 import { ConversionBanner } from "../components/ConversionBanner";
+import { OptimizedImage } from "../components/OptimizedImage";
 import { businessInfo } from "../data/businessInfo";
-import { getAssetUrl } from "../utils/assets";
 
 export const AboutPage: React.FC = () => {
   return (
@@ -86,10 +86,11 @@ export const AboutPage: React.FC = () => {
             {/* Right Visual: Real Cleaner Specialist Photo */}
             <div className="lg:col-span-5">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/3]">
-                <img
-                  src={getAssetUrl("/images/cleaner_team_friendly.jpg")}
+                <OptimizedImage
+                  src="/images/cleaner_team_friendly.jpg"
                   alt="Friendly professional cleaner in uniform holding eco-friendly cleaning supplies in modern kitchen"
-                  className="w-full h-full object-cover"
+                  wrapperClassName="w-full h-full"
+                  priority={true}
                 />
                 <div className="absolute bottom-3 left-3 right-3 px-3 py-2 rounded-xl bg-slate-900/80 backdrop-blur-md text-white text-xs flex items-center justify-between border border-white/20">
                   <span className="font-semibold">Vetted Professional Staff</span>

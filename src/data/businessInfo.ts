@@ -12,9 +12,17 @@ export interface BusinessInfo {
   operatingHoursNotice: string;
   disclaimer: string;
   logo: string;
+  logoWebp?: string;
   logoWhite: string;
+  logoWhiteWebp?: string;
   logoEmblem: string;
+  logoEmblemWebp?: string;
+  logoEmblemNav: string;
+  logoEmblemNavWebp: string;
   logoWhiteEmblem: string;
+  logoWhiteEmblemWebp?: string;
+  logoWhiteEmblemNav: string;
+  logoWhiteEmblemNavWebp: string;
 }
 
 export const businessInfo: BusinessInfo = {
@@ -31,9 +39,17 @@ export const businessInfo: BusinessInfo = {
   operatingHoursNotice: "Cleaning schedules arranged 7 days a week to suit your property and schedule.",
   disclaimer: "Cleaner in Manchester (0161) Ltd provides insured domestic and commercial cleaning throughout Greater Manchester. All cleaning staff are vetted, DBS-checked, and covered by comprehensive £2,000,000 public liability insurance.",
   logo: "/images/company_logo.png",
+  logoWebp: "/images/company_logo.webp",
   logoWhite: "/images/company_logo_white.png",
+  logoWhiteWebp: "/images/company_logo_white.webp",
   logoEmblem: "/images/company_logo_emblem.png",
-  logoWhiteEmblem: "/images/company_logo_white_emblem.png"
+  logoEmblemWebp: "/images/company_logo_emblem.webp",
+  logoEmblemNav: "/images/company_logo_emblem_nav.png",
+  logoEmblemNavWebp: "/images/company_logo_emblem_nav.webp",
+  logoWhiteEmblem: "/images/company_logo_white_emblem.png",
+  logoWhiteEmblemWebp: "/images/company_logo_white_emblem.webp",
+  logoWhiteEmblemNav: "/images/company_logo_white_emblem_nav.png",
+  logoWhiteEmblemNavWebp: "/images/company_logo_white_emblem_nav.webp"
 };
 
 export interface ServiceArea {

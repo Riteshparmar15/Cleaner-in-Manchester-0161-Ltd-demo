@@ -16,14 +16,18 @@ export const Footer: React.FC = () => {
           {/* Brand & Mission (2 cols on lg) */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <img
-                src={getAssetUrl(businessInfo.logoWhiteEmblem)}
-                alt="Cleaner in Manchester (0161) Ltd Logo"
-                className="w-11 h-11 object-contain drop-shadow-sm"
-                width={44}
-                height={44}
-                loading="lazy"
-              />
+              <picture className="w-11 h-11 shrink-0">
+                <source srcSet={getAssetUrl(businessInfo.logoWhiteEmblemNavWebp)} type="image/webp" />
+                <img
+                  src={getAssetUrl(businessInfo.logoWhiteEmblemNav)}
+                  alt="Cleaner in Manchester (0161) Ltd Logo"
+                  className="w-full h-full object-contain drop-shadow-sm"
+                  width={44}
+                  height={44}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               <div>
                 <span className="text-xl font-black tracking-tight text-white block">
                   Cleaner in Manchester

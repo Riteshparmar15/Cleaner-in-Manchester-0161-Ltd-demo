@@ -12,13 +12,13 @@ import { ServiceAreaSection } from "../components/ServiceAreaSection";
 import { FAQSection } from "../components/FAQSection";
 import { ConversionBanner } from "../components/ConversionBanner";
 import { TimeSavingBookingWidget } from "../components/TimeSavingBookingWidget";
+import { OptimizedImage } from "../components/OptimizedImage";
 import {
   SmoothFadeIn,
   StaggerContainer,
   StaggerItem
 } from "../components/MotionWrappers";
 import { appleEase } from "../data/motionConfig";
-import { getAssetUrl } from "../utils/assets";
 
 export const HomePage: React.FC = () => {
   return (
@@ -63,13 +63,14 @@ export const HomePage: React.FC = () => {
 
               {/* Visual Cleaner Thumbnail with Trust Proof */}
               <div className="w-full p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm mb-6 flex items-center gap-4">
-                <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100 shadow-xs">
-                  <img
-                    src={getAssetUrl("/images/hero_cleaner_action.jpg")}
-                    alt="Professional Manchester cleaner in uniform wiping kitchen worktop"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <OptimizedImage
+                  src="/images/hero_cleaner_action.jpg"
+                  alt="Professional Manchester cleaner in uniform wiping kitchen worktop"
+                  wrapperClassName="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100 shadow-xs"
+                  priority={true}
+                  width={64}
+                  height={64}
+                />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
                     <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />

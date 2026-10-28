@@ -89,14 +89,19 @@ export const Header: React.FC = () => {
               className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-[#14355F] rounded-xl p-1 transition-transform duration-300 hover:scale-[1.01]"
               aria-label="Cleaner in Manchester (0161) Ltd - Return to homepage"
             >
-              <img
-                src={getAssetUrl(businessInfo.logoEmblem)}
-                alt="Cleaner in Manchester (0161) Ltd Logo"
-                className="w-10 h-10 sm:w-11 sm:h-11 object-contain rounded-xl drop-shadow-xs transition-transform duration-300 group-hover:scale-105"
-                width={44}
-                height={44}
-                loading="eager"
-              />
+              <picture className="w-10 h-10 sm:w-11 sm:h-11 shrink-0">
+                <source srcSet={getAssetUrl(businessInfo.logoEmblemNavWebp)} type="image/webp" />
+                <img
+                  src={getAssetUrl(businessInfo.logoEmblemNav)}
+                  alt="Cleaner in Manchester (0161) Ltd Logo"
+                  className="w-full h-full object-contain rounded-xl drop-shadow-xs transition-transform duration-300 group-hover:scale-105"
+                  width={44}
+                  height={44}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              </picture>
               <div className="flex flex-col">
                 <span className="font-black text-slate-900 text-base sm:text-lg leading-tight tracking-tight group-hover:text-[#14355F] transition-colors duration-200">
                   Cleaner in Manchester

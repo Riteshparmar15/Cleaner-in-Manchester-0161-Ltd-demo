@@ -12,6 +12,7 @@ import { servicesData } from "../data/servicesData";
 import { businessInfo } from "../data/businessInfo";
 import { FAQSection } from "../components/FAQSection";
 import { ConversionBanner } from "../components/ConversionBanner";
+import { OptimizedImage } from "../components/OptimizedImage";
 
 export const ServiceDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -78,12 +79,14 @@ export const ServiceDetailPage: React.FC = () => {
             {/* Right Visual showing cleaner in action */}
             <div className="lg:col-span-5">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 aspect-[4/3] group">
-                <img
+                <OptimizedImage
                   src={service.image}
                   alt={`${service.title} standard in Manchester`}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  wrapperClassName="w-full h-full"
+                  className="transition-transform duration-700 group-hover:scale-105"
+                  priority={true}
                 />
-                <div className="absolute bottom-3 left-3 right-3 px-3 py-2 rounded-xl bg-slate-900/80 backdrop-blur-md text-white text-xs flex items-center justify-between border border-white/20">
+                <div className="absolute bottom-3 left-3 right-3 px-3 py-2 rounded-xl bg-slate-900/80 backdrop-blur-md text-white text-xs flex items-center justify-between border border-white/20 pointer-events-none">
                   <span className="flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
                     <span>DBS Checked Cleaners</span>

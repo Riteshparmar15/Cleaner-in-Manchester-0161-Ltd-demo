@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, ShieldCheck, Zap } from "lucide-react";
 import type { ServiceDetail } from "../data/servicesData";
+import { OptimizedImage } from "./OptimizedImage";
 
 interface ServiceCardProps {
   service: ServiceDetail;
@@ -24,13 +25,13 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
     <article className="mac-card flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:border-[#14355F]/40 hover:shadow-lg transition-all group">
       {/* Clean Visual with Cleaner in Action */}
       <div className="relative h-52 w-full overflow-hidden bg-slate-100">
-        <img
+        <OptimizedImage
           src={service.image}
           alt={`Professional cleaner performing ${service.title} in Manchester`}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
+          wrapperClassName="w-full h-full"
+          className="transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none"></div>
 
         {/* Starting Price Pill */}
         <div className="absolute top-3 left-3">
