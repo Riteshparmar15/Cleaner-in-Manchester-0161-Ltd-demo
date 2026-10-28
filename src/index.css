@@ -1,29 +1,44 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy: #142B3B;
-  --color-navy-dark: #0D1D28;
-  --color-navy-light: #1B384D;
-  --color-navy-subtle: #234761;
-  --color-green: #43A66B;
-  --color-green-dark: #348655;
-  --color-green-light: #EDF7F1;
-  --color-green-subtle: #D2EEDE;
-  --color-light-bg: #F7F9FA;
-  --color-main-text: #202A33;
-  --color-secondary-text: #65727E;
-  --color-border-subtle: #E5E9ED;
+  --color-primary-navy: #14355F;
+  --color-primary-navy-dark: #0E2543;
+  --color-primary-navy-light: #EBF3FA;
+  --color-primary-blue: #14355F;
+  --color-primary-blue-dark: #0E2543;
+  --color-primary-blue-light: #EBF3FA;
+  --color-teal-accent: #0D9488;
+  --color-teal-light: #F0FDFA;
+  --color-navy: #0F172A;
+  --color-navy-dark: #020617;
+  --color-navy-light: #1E293B;
+  --color-navy-subtle: #334155;
+  --color-green: #059669;
+  --color-green-dark: #047857;
+  --color-green-light: #ECFDF5;
+  --color-green-subtle: #D1FAE5;
+  --color-light-bg: #F8FAFC;
+  --color-ice-bg: #F8FAFC;
+  --color-star: #F59E0B;
+  --color-main-text: #0F172A;
+  --color-secondary-text: #475569;
+  --color-border-subtle: #E2E8F0;
   --font-sans: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 :root {
   color-scheme: light;
-  --primary-navy: #142B3B;
-  --primary-green: #43A66B;
-  --bg-light: #F7F9FA;
-  --text-main: #202A33;
-  --text-muted: #65727E;
-  --border-color: #E5E9ED;
+  --primary-navy: #14355F;
+  --primary-navy-dark: #0E2543;
+  --primary-blue: #14355F;
+  --primary-blue-dark: #0E2543;
+  --primary-teal: #0D9488;
+  --primary-green: #059669;
+  --primary-navy: #0F172A;
+  --bg-light: #F8FAFC;
+  --text-main: #0F172A;
+  --text-muted: #475569;
+  --border-color: #E2E8F0;
   --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -47,20 +62,20 @@ body {
 
 /* Apple-style Frosted Glass Acrylic */
 .mac-glass {
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(229, 233, 237, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.85);
 }
 
 .mac-glass-dark {
-  background: rgba(20, 43, 59, 0.88);
+  background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(24px) saturate(190%);
   -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Apple-style Card Elevation */
+/* Card Elevation */
 .mac-card {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
               box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
@@ -69,10 +84,10 @@ body {
 
 .mac-card:hover {
   transform: translateY(-4px) scale(1.008);
-  box-shadow: 0 20px 40px -15px rgba(20, 43, 59, 0.08), 0 0 0 1px rgba(67, 166, 107, 0.25);
+  box-shadow: 0 20px 40px -15px rgba(20, 53, 95, 0.12), 0 0 0 1px rgba(20, 53, 95, 0.2);
 }
 
-/* Mac-style Button Spring Click & Hover */
+/* Button Spring Click & Hover */
 .mac-btn {
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), 
               box-shadow 0.3s ease, 
@@ -85,6 +100,46 @@ body {
 
 .mac-btn:active {
   transform: translateY(0.5px) scale(0.98);
+}
+
+/* Continuous Marquee Ticker for Motion Reviews */
+@keyframes marquee-infinite {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-infinite 42s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Reverse Marquee */
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee-reverse 45s linear infinite;
+}
+
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
 }
 
 /* Subtle Floating Breathing Animation for badges / cards */
@@ -112,7 +167,7 @@ body {
 }
 
 .mac-shimmer-badge {
-  background: linear-gradient(90deg, rgba(67, 166, 107, 0.1) 0%, rgba(67, 166, 107, 0.25) 50%, rgba(67, 166, 107, 0.1) 100%);
+  background: linear-gradient(90deg, rgba(20, 53, 95, 0.04) 0%, rgba(20, 53, 95, 0.12) 50%, rgba(20, 53, 95, 0.04) 100%);
   background-size: 200% 100%;
   animation: mac-shimmer 4s ease-in-out infinite;
 }

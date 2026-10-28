@@ -31,7 +31,7 @@ export const servicesData: ServiceDetail[] = [
     title: "Regular Home Cleaning",
     shortTagline: "Consistent, dependable domestic cleaning arranged around your weekly or fortnightly routine.",
     heroDescription: "Enjoy a consistently tidy, hygienic home without spending your weekends cleaning. Tailored to your household routines in Manchester.",
-    image: getAssetUrl("/images/hero_clean_home.jpg"),
+    image: getAssetUrl("/images/cleaner_vacuuming.jpg"),
     targetAudience: ["Busy professionals", "Busy families", "Homeowners", "Remote workers"],
     overview: "Our regular domestic cleaning service provides reliable, ongoing upkeep for houses and flats throughout Manchester. Whether you need weekly, fortnightly, or tailored frequency visits, our professional team follows a methodical routine to ensure your living spaces stay spotless.",
     highlights: [
@@ -107,7 +107,7 @@ export const servicesData: ServiceDetail[] = [
     title: "Apartment Cleaning",
     shortTagline: "Tailored cleaning for modern city centre flats, duplexes, and residential developments.",
     heroDescription: "Specialised cleaning designed for Manchester apartment living—from compact studios to open-plan penthouses with concierge access.",
-    image: getAssetUrl("/images/service_apartment.jpg"),
+    image: getAssetUrl("/images/cleaner_apartment_action.jpg"),
     targetAudience: ["City centre flat residents", "Landlords", "Short-let hosts", "Young professionals"],
     overview: "Manchester's vibrant city centre and surrounding quarters are home to unique apartment developments, from converted Victorian cotton mills in Ancoats to sleek new towers on Deansgate. Our apartment cleaning service is tailored to modern urban layouts, hardwood flooring, large glass windows, and building access protocols.",
     highlights: [
@@ -177,7 +177,7 @@ export const servicesData: ServiceDetail[] = [
     title: "Deep Cleaning",
     shortTagline: "Intensive, methodical top-to-bottom sanitisation for properties needing an extensive refresh.",
     heroDescription: "A rigorous deep clean targeting embedded grime, limescale, grease, and neglected corners across your entire property.",
-    image: getAssetUrl("/images/service_deep_clean.jpg"),
+    image: getAssetUrl("/images/cleaner_bathroom.jpg"),
     targetAudience: ["Spring clean seekers", "New homeowners", "Post-renovation refresh", "Seasonal preparation"],
     overview: "When regular surface tidying isn't enough, our Manchester deep cleaning service delivers an exhaustive, intensive clean of your entire property. We get behind appliances, scrub stubborn tile grout, eradicate limescale, and refresh skirting boards and door frames to restore a pristine environment.",
     highlights: [
@@ -247,7 +247,7 @@ export const servicesData: ServiceDetail[] = [
     title: "End-of-Tenancy Cleaning",
     shortTagline: "Comprehensive, inventory-ready cleaning designed for tenant handovers and letting agent inspections.",
     heroDescription: "High-standard handover cleaning across Manchester designed to meet stringent check-out inventories and tenancy agreements.",
-    image: getAssetUrl("/images/service_end_tenancy.jpg"),
+    image: getAssetUrl("/images/cleaner_tenancy_oven.jpg"),
     targetAudience: ["Moving tenants", "Letting agents", "Landlords", "Property managers"],
     overview: "Moving home is stressful enough without having to worry about deposit deductions due to cleaning oversights. Our Manchester end-of-tenancy cleaning is planned systematically against typical inventory check-out standards, covering inside kitchen appliances, internal cupboards, sanitised bathrooms, and spotless floors.",
     highlights: [
@@ -294,7 +294,7 @@ export const servicesData: ServiceDetail[] = [
       },
       {
         title: "Faster Re-Letting for Landlords",
-        description: "Present a sparkling property to prospective tenants and avoid void rental periods."
+        description: "Present a pristine property to prospective tenants and avoid void rental periods."
       },
       {
         title: "Transparent & Detailed Process",
@@ -317,7 +317,7 @@ export const servicesData: ServiceDetail[] = [
     title: "Office Cleaning",
     shortTagline: "Flexible, discreet commercial cleaning for Manchester workplaces, studios, and small offices.",
     heroDescription: "Create a pristine, healthy, and professional environment for your team and clients with our tailored Manchester commercial cleaning.",
-    image: getAssetUrl("/images/service_office.jpg"),
+    image: getAssetUrl("/images/cleaner_office_action.jpg"),
     targetAudience: ["Small and medium offices", "Creative studios", "Consultancies", "Co-working spaces"],
     overview: "A clean office boosts morale, reduces sick days, and presents an impressive image to visiting clients. Cleaner in Manchester provides dependable commercial cleaning tailored to modern business routines. We offer early morning, evening, or daytime visits to suit your operational preferences.",
     highlights: [
@@ -392,7 +392,7 @@ export const servicesData: ServiceDetail[] = [
     title: "End-of-Construction Cleaning",
     shortTagline: "Specialised builders clean to eliminate plaster dust, paint specks, and residue after renovation.",
     heroDescription: "Detailed post-build sparkle clean transforming newly constructed or renovated Manchester properties into move-in ready spaces.",
-    image: getAssetUrl("/images/service_construction.jpg"),
+    image: getAssetUrl("/images/cleaner_construction_action.jpg"),
     targetAudience: ["Property developers", "Interior designers", "Homeowners post-extension", "Shopfitters"],
     overview: "Renovation and building work inevitably leaves behind fine plaster dust, paint splatters, adhesive residue, and protective tape. Our end-of-construction cleaning tackles post-build dust at every level, polishing fixtures, washing woodwork, and removing residue from new installations so your property shines.",
     highlights: [
@@ -425,7 +425,7 @@ export const servicesData: ServiceDetail[] = [
         items: [
           "Thorough vacuuming of newly laid carpets to lift building dust",
           "Multiple-stage washing and buffing of luxury vinyl tile (LVT), laminate, or porcelain floors",
-          "Final walkthrough inspection to guarantee inspection-ready sparkle"
+          "Final walkthrough inspection to guarantee handover-ready presentation"
         ]
       }
     ],

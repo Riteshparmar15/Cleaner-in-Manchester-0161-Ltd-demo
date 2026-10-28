@@ -23,14 +23,14 @@ export const ServiceAreaSection: React.FC = () => {
     <section className="py-20 bg-white" aria-labelledby="service-area-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#EDF7F1] text-[#43A66B] text-xs font-extrabold uppercase tracking-wider mb-3">
+          <span className="inline-block px-3 py-1 rounded-full bg-[#14355F]/10 text-[#14355F] text-xs font-black uppercase tracking-wider mb-3">
             Coverage Area
           </span>
-          <h2 id="service-area-heading" className="text-3xl sm:text-4xl font-extrabold text-[#142B3B] tracking-tight">
+          <h2 id="service-area-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
             Serving Properties Across Manchester
           </h2>
-          <p className="mt-3 text-sm text-[#65727E] leading-relaxed">
-            From city centre apartment towers to suburban family homes, our cleaning teams cover key Manchester districts and postcodes.
+          <p className="mt-3 text-base text-slate-600 leading-relaxed">
+            From city centre high-rise apartments to leafy suburban homes, our vetted cleaning teams cover key Manchester districts and postcodes.
           </p>
         </div>
 
@@ -44,7 +44,7 @@ export const ServiceAreaSection: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by area or postcode (e.g. M4, Didsbury, M1)..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E5E9ED] bg-[#F7F9FA] text-sm text-[#202A33] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#43A66B] focus:bg-white transition-all"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#14355F] focus:bg-white transition-all"
             />
           </div>
 
@@ -56,8 +56,8 @@ export const ServiceAreaSection: React.FC = () => {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
                   selectedCategory === cat
-                    ? "bg-[#142B3B] text-white"
-                    : "bg-[#F7F9FA] text-[#65727E] hover:bg-[#E5E9ED] hover:text-[#202A33]"
+                    ? "bg-[#14355F] text-white"
+                    : "bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200"
                 }`}
               >
                 {cat}
@@ -72,46 +72,46 @@ export const ServiceAreaSection: React.FC = () => {
             filteredAreas.map((area, idx) => (
               <div
                 key={idx}
-                className="p-5 rounded-2xl bg-[#F7F9FA] border border-[#E5E9ED] hover:border-[#43A66B]/50 transition-all flex flex-col justify-between"
+                className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200 hover:border-[#14355F]/30 hover:bg-white hover:shadow-md transition-all flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <h3 className="text-base font-bold text-[#142B3B] flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-[#43A66B] shrink-0" />
+                    <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 group-hover:text-[#14355F] transition-colors">
+                      <MapPin className="w-4 h-4 text-[#14355F] shrink-0" />
                       <span>{area.name}</span>
                     </h3>
-                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-white border border-[#E5E9ED] text-[#142B3B]">
+                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">
                       {area.postcodes}
                     </span>
                   </div>
-                  <p className="text-xs text-[#65727E] leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     {area.description}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-[#E5E9ED]/60 flex items-center justify-between text-xs">
-                  <span className="text-slate-500 font-medium">{area.category}</span>
+                <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between text-xs">
+                  <span className="text-slate-400 font-medium">{area.category}</span>
                   <Link
                     to={`/quote?postcode=${encodeURIComponent(area.postcodes.split(",")[0].trim())}`}
-                    className="font-bold text-[#43A66B] hover:underline inline-flex items-center gap-1"
+                    className="font-bold text-[#14355F] hover:text-[#0E2543] inline-flex items-center gap-1"
                   >
-                    <span>Check Quote</span>
+                    <span>Instant Quote</span>
                     <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-span-full text-center py-12 bg-[#F7F9FA] rounded-2xl border border-dashed border-[#E5E9ED]">
-              <p className="text-sm font-semibold text-[#142B3B]">
+            <div className="col-span-full text-center py-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+              <p className="text-sm font-semibold text-slate-900">
                 No direct matches found for "{searchQuery}"
               </p>
-              <p className="text-xs text-[#65727E] mt-1 max-w-md mx-auto">
-                We frequently accommodate neighboring postcodes across Greater Manchester. Contact our team to confirm.
+              <p className="text-xs text-slate-600 mt-1 max-w-md mx-auto">
+                We accommodate neighboring postcodes across Greater Manchester. Contact our team to confirm.
               </p>
               <a
                 href={businessInfo.phoneHref}
-                className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-[#43A66B] hover:underline"
+                className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-[#14355F] hover:underline"
               >
                 <Phone className="w-3.5 h-3.5" />
                 <span>Call {businessInfo.phoneFormatted}</span>
@@ -121,18 +121,18 @@ export const ServiceAreaSection: React.FC = () => {
         </div>
 
         {/* Coverage Note Banner */}
-        <div className="mt-10 p-4 rounded-xl bg-[#EDF7F1] border border-[#D2EEDE] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-10 p-4 rounded-xl bg-slate-100 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-[#43A66B] shrink-0" />
-            <p className="text-xs sm:text-sm text-[#142B3B]">
-              <strong>Coverage Verification:</strong> Service availability and parking arrangements are verified upon quote request.
+            <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+            <p className="text-xs sm:text-sm text-slate-800">
+              <strong>Need a clean this week?</strong> We cover all Manchester M1–M50 postcodes plus Cheshire and Salford borders.
             </p>
           </div>
           <Link
             to="/quote"
-            className="shrink-0 px-4 py-2 rounded-lg bg-[#43A66B] text-white text-xs font-bold hover:bg-[#348655] transition-colors"
+            className="shrink-0 px-4 py-2 rounded-lg bg-[#14355F] text-white text-xs font-bold hover:bg-[#0E2543] transition-colors shadow-xs"
           >
-            Request Postcode Quote
+            Check Postcode Availability
           </Link>
         </div>
       </div>

@@ -1,29 +1,31 @@
-import { Phone, CheckCircle2 } from "lucide-react";
+import React from "react";
+import { Phone, CheckCircle2, ShieldCheck, Zap } from "lucide-react";
 
 import { QuoteForm } from "../components/QuoteForm";
 import { businessInfo } from "../data/businessInfo";
 
 export const QuotePage: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-[#F7F9FA]">
+    <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Header Banner */}
-      <section className="bg-[#142B3B] text-white py-12 lg:py-16 border-b border-[#1D3D52]">
+      <section className="bg-slate-900 text-white py-12 lg:py-16 border-b border-slate-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#1B384D] border border-[#234761] text-[#43A66B] text-xs font-bold uppercase tracking-wider mb-4">
-            Manchester Cleaning Enquiry
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-teal-400 text-xs font-bold uppercase tracking-wider mb-4">
+            <Zap className="w-3.5 h-3.5 text-teal-400" />
+            <span>Time-Saving Manchester Enquiry</span>
           </span>
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-3">
-            Request Your Free Quote
+          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-3">
+            Request Your Cleaning Quote
           </h1>
           <p className="max-w-xl mx-auto text-sm sm:text-base text-slate-300 leading-relaxed mb-6">
-            Tell us about your property size and cleaning needs. We provide straightforward, tailored pricing without hidden extras.
+            Tell us about your property size and schedule. We provide instant, transparent pricing with eco-supplies included.
           </p>
 
-          <div className="inline-flex items-center gap-2 text-xs sm:text-sm text-slate-300 bg-[#1B384D]/60 px-4 py-2 rounded-full border border-[#234761]">
-            <span>Prefer to chat now?</span>
+          <div className="inline-flex items-center gap-2 text-xs sm:text-sm text-slate-300 bg-slate-800/80 px-4 py-2 rounded-full border border-slate-700">
+            <span>Prefer to chat with us now?</span>
             <a
               href={businessInfo.phoneHref}
-              className="font-bold text-[#43A66B] hover:text-white transition-colors inline-flex items-center gap-1.5"
+              className="font-bold text-teal-400 hover:text-white transition-colors inline-flex items-center gap-1.5"
             >
               <Phone className="w-3.5 h-3.5" />
               <span>{businessInfo.phoneFormatted}</span>
@@ -37,17 +39,17 @@ export const QuotePage: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Trust Guarantees Strip */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-white border border-[#E5E9ED] text-xs font-semibold text-[#142B3B]">
-              <CheckCircle2 className="w-4 h-4 text-[#43A66B] shrink-0" />
-              <span>Obligation-free estimate</span>
+            <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-800 shadow-xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>Zero-obligation estimate</span>
             </div>
-            <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-white border border-[#E5E9ED] text-xs font-semibold text-[#142B3B]">
-              <CheckCircle2 className="w-4 h-4 text-[#43A66B] shrink-0" />
-              <span>Tailored to your property</span>
+            <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-800 shadow-xs">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>£2M Insured & DBS Vetted</span>
             </div>
-            <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-white border border-[#E5E9ED] text-xs font-semibold text-[#142B3B]">
-              <CheckCircle2 className="w-4 h-4 text-[#43A66B] shrink-0" />
-              <span>Prompt local response</span>
+            <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-800 shadow-xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>100% Free Re-Clean Guarantee</span>
             </div>
           </div>
 

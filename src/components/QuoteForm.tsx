@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import {
@@ -7,11 +7,20 @@ import {
   AlertCircle,
   Info,
   RefreshCw,
-  Phone
+  Phone,
+  Zap,
+  Check
 } from "lucide-react";
 
 import { businessInfo } from "../data/businessInfo";
 import { servicesData } from "../data/servicesData";
+import {
+  calculateCleaningEstimate,
+  getFrequencyLabel,
+  normalizeService,
+  mapBedroomsValue,
+  mapBathroomsValue
+} from "../utils/pricingCalculator";
 
 export interface QuoteFormData {
   fullName: string;
@@ -24,57 +33,222 @@ export interface QuoteFormData {
   propertySize: string;
   bedrooms: string;
   bathrooms: string;
+  frequency: "weekly" | "fortnightly" | "one-off";
   additionalDetails: string;
   privacyAgreed: boolean;
   honeypot: string; // Anti-spam field
+}
+
+export interface EstimateDetails {
+  service: string;
+  bedroomsText: string;
+  bathroomsText: string;
+  frequency: "weekly" | "fortnightly" | "one-off";
+  frequencyText: string;
+  price: number | string;
+  hours: number | string;
 }
 
 const initialFormData: QuoteFormData = {
   fullName: "",
   email: "",
   telephone: "",
-  service: "",
-  propertyType: "",
+  service: "Regular Home Cleaning",
+  propertyType: "Apartment / City Flat",
   postcode: "",
   preferredDate: "",
   propertySize: "",
-  bedrooms: "",
-  bathrooms: "",
+  bedrooms: "2 Bedrooms",
+  bathrooms: "1 Bathroom",
+  frequency: "fortnightly",
   additionalDetails: "",
   privacyAgreed: false,
   honeypot: ""
 };
 
-const getInitialFormData = (searchParams: URLSearchParams): QuoteFormData => {
-  const serviceParam = searchParams.get("service");
-  const postcodeParam = searchParams.get("postcode");
+const getInitialData = (
+  searchParams: URLSearchParams
+): { formData: QuoteFormData; estimate: EstimateDetails } => {
+  let stored: any = null;
+  try {
+    const raw =
+      sessionStorage.getItem("cleaner_manchester_calculator_booking") ||
+      localStorage.getItem("cleaner_manchester_calculator_booking");
+    if (raw) stored = JSON.parse(raw);
+  } catch {}
 
-  let initialService = "";
-  if (serviceParam) {
-    const matched = servicesData.find(
-      (s) =>
-        s.title.toLowerCase() === serviceParam.toLowerCase() ||
-        s.slug.toLowerCase() === serviceParam.toLowerCase()
-    );
-    initialService = matched ? matched.title : serviceParam;
+  const serviceParam = searchParams.get("service") || stored?.service || "Regular Home Cleaning";
+  const initialService = normalizeService(serviceParam);
+  const isOffice = initialService === "Office Cleaning";
+
+  const bedroomsParam = searchParams.get("bedrooms") || stored?.bedrooms || 2;
+  const bathroomsParam = searchParams.get("bathrooms") || stored?.bathrooms || 1;
+  const rawFrequency = (searchParams.get("frequency") || stored?.frequency || "fortnightly") as "weekly" | "fortnightly" | "one-off";
+  const postcodeParam = searchParams.get("postcode") || stored?.postcode || "";
+  const telephoneParam =
+    searchParams.get("telephone") ||
+    searchParams.get("phone") ||
+    stored?.telephone ||
+    "";
+
+  const initialBedrooms = mapBedroomsValue(bedroomsParam, isOffice);
+  const initialBathrooms = mapBathroomsValue(bathroomsParam, isOffice);
+
+  // Category-wise frequency defaulting
+  let frequency: "weekly" | "fortnightly" | "one-off" = rawFrequency;
+  if (initialService === "End-of-Tenancy Cleaning" || initialService === "Deep Cleaning") {
+    frequency = "one-off";
+  } else if (isOffice && rawFrequency === "one-off") {
+    frequency = "weekly";
   }
 
-  return {
-    ...initialFormData,
+  // Intelligent property type inference
+  let initialPropertyType = "";
+  if (isOffice) {
+    initialPropertyType = "Commercial Office / Studio";
+  } else if (initialService === "Apartment Cleaning") {
+    initialPropertyType = "Apartment / City Flat";
+  } else if (initialBedrooms.includes("Studio") || initialBedrooms.includes("2 Bed") || initialBedrooms.includes("1 Room")) {
+    initialPropertyType = "Apartment / City Flat";
+  } else if (initialBedrooms.includes("3 Bed") || initialBedrooms.includes("3 Office")) {
+    initialPropertyType = "Terraced House";
+  } else {
+    initialPropertyType = "Semi-Detached House";
+  }
+
+  const { price, hours } = calculateCleaningEstimate(initialService, bedroomsParam, bathroomsParam, frequency);
+  const freqLabel = getFrequencyLabel(frequency);
+
+  const estimate: EstimateDetails = {
     service: initialService,
-    postcode: postcodeParam || ""
+    bedroomsText: initialBedrooms,
+    bathroomsText: initialBathrooms,
+    frequency,
+    frequencyText: freqLabel,
+    price,
+    hours
+  };
+
+  const initialDetails = `Time-Saving Calculator Booking:
+• Service: ${estimate.service}
+• Size: ${estimate.bedroomsText}, ${estimate.bathroomsText}
+• Frequency: ${estimate.frequencyText}
+• Estimated Price: £${estimate.price} ${estimate.frequency === "one-off" ? "(One-off)" : "/ visit"}
+• Projected Time Saved: ~${estimate.hours} hrs/week
+(${isOffice ? "Workstations & staff washrooms included" : "Eco-friendly supplies & DBS-checked cleaner included"})`;
+
+  return {
+    formData: {
+      ...initialFormData,
+      service: initialService,
+      propertyType: initialPropertyType,
+      postcode: postcodeParam,
+      telephone: telephoneParam,
+      bedrooms: initialBedrooms,
+      bathrooms: initialBathrooms,
+      frequency,
+      additionalDetails: initialDetails
+    },
+    estimate
   };
 };
 
 export const QuoteForm: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const [formData, setFormData] = useState<QuoteFormData>(() => getInitialFormData(searchParams));
+  const initial = getInitialData(searchParams);
+
+  const [formData, setFormData] = useState<QuoteFormData>(initial.formData);
+  const [estimateDetails, setEstimateDetails] = useState<EstimateDetails | null>(initial.estimate);
   const [errors, setErrors] = useState<Partial<Record<keyof QuoteFormData, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   const [statusMessage, setStatusMessage] = useState("");
   const [simulateFailure, setSimulateFailure] = useState(false);
   const [submittedPayload, setSubmittedPayload] = useState<QuoteFormData | null>(null);
+
+  // Category identification
+  const isOffice = formData.service === "Office Cleaning";
+  const isTenancy = formData.service === "End-of-Tenancy Cleaning";
+  const isDeep = formData.service === "Deep Cleaning";
+  const isDomestic = formData.service === "Regular Home Cleaning";
+
+  // Sync state if navigation or query params change
+  useEffect(() => {
+    const fresh = getInitialData(searchParams);
+    setEstimateDetails(fresh.estimate);
+    setFormData((prev) => ({
+      ...prev,
+      service: fresh.formData.service || prev.service,
+      propertyType: prev.propertyType || fresh.formData.propertyType,
+      postcode: fresh.formData.postcode || prev.postcode,
+      telephone: fresh.formData.telephone || prev.telephone,
+      bedrooms: fresh.formData.bedrooms || prev.bedrooms,
+      bathrooms: fresh.formData.bathrooms || prev.bathrooms,
+      frequency: fresh.formData.frequency || prev.frequency,
+      additionalDetails: prev.additionalDetails ? prev.additionalDetails : fresh.formData.additionalDetails
+    }));
+  }, [searchParams]);
+
+  // Handle category / service change
+  const handleServiceChange = (newService: string) => {
+    const isOff = newService === "Office Cleaning";
+    let newFreq = formData.frequency;
+    if (newService === "End-of-Tenancy Cleaning" || newService === "Deep Cleaning") {
+      newFreq = "one-off";
+    } else if (newService === "Office Cleaning") {
+      if (newFreq === "one-off") newFreq = "weekly";
+    } else if (newService === "Regular Home Cleaning") {
+      if (newFreq === "one-off") newFreq = "fortnightly";
+    }
+
+    let newPropertyType = formData.propertyType;
+    if (isOff) {
+      newPropertyType = "Commercial Office / Studio";
+    } else if (newPropertyType === "Commercial Office / Studio" || newPropertyType === "Other Commercial Premises") {
+      newPropertyType = "Apartment / City Flat";
+    }
+
+    const newBedrooms = mapBedroomsValue(formData.bedrooms, isOff);
+    const newBathrooms = mapBathroomsValue(formData.bathrooms, isOff);
+    const calc = calculateCleaningEstimate(newService, newBedrooms, newBathrooms, newFreq);
+
+    setFormData((prev) => ({
+      ...prev,
+      service: newService,
+      propertyType: newPropertyType,
+      bedrooms: newBedrooms,
+      bathrooms: newBathrooms,
+      frequency: newFreq
+    }));
+
+    setEstimateDetails({
+      service: newService,
+      bedroomsText: newBedrooms,
+      bathroomsText: newBathrooms,
+      frequency: newFreq,
+      frequencyText: getFrequencyLabel(newFreq),
+      price: calc.price,
+      hours: calc.hours
+    });
+  };
+
+  // Handle frequency & savings change
+  const handleFrequencyChange = (newFreq: "weekly" | "fortnightly" | "one-off") => {
+    const calc = calculateCleaningEstimate(formData.service, formData.bedrooms, formData.bathrooms, newFreq);
+    setFormData((prev) => ({
+      ...prev,
+      frequency: newFreq
+    }));
+    setEstimateDetails((prev) => ({
+      service: prev?.service || formData.service,
+      bedroomsText: prev?.bedroomsText || formData.bedrooms,
+      bathroomsText: prev?.bathroomsText || formData.bathrooms,
+      frequency: newFreq,
+      frequencyText: getFrequencyLabel(newFreq),
+      price: calc.price,
+      hours: calc.hours
+    }));
+  };
 
   const validateField = (name: keyof QuoteFormData, value: any): string => {
     switch (name) {
@@ -121,10 +295,32 @@ export const QuoteForm: React.FC = () => {
     const checked = (e.target as HTMLInputElement).checked;
     const fieldValue = type === "checkbox" ? checked : value;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: fieldValue
-    }));
+    setFormData((prev) => {
+      const updated = {
+        ...prev,
+        [name]: fieldValue
+      };
+
+      if (name === "bedrooms" || name === "bathrooms") {
+        const calc = calculateCleaningEstimate(
+          updated.service,
+          updated.bedrooms,
+          updated.bathrooms,
+          updated.frequency
+        );
+        setEstimateDetails((estPrev) => ({
+          service: estPrev?.service || updated.service,
+          bedroomsText: updated.bedrooms,
+          bathroomsText: updated.bathrooms,
+          frequency: estPrev?.frequency || updated.frequency,
+          frequencyText: estPrev?.frequencyText || getFrequencyLabel(updated.frequency),
+          price: calc.price,
+          hours: calc.hours
+        }));
+      }
+
+      return updated;
+    });
 
     // Clear error for this field
     if (errors[name as keyof QuoteFormData]) {
@@ -202,6 +398,7 @@ export const QuoteForm: React.FC = () => {
         const savedQuotes = JSON.parse(localStorage.getItem("cleaner_manchester_quotes") || "[]");
         savedQuotes.push({
           ...formData,
+          estimateDetails,
           submittedAt: new Date().toISOString()
         });
         localStorage.setItem("cleaner_manchester_quotes", JSON.stringify(savedQuotes));
@@ -221,6 +418,11 @@ export const QuoteForm: React.FC = () => {
 
   const resetForm = () => {
     setFormData(initialFormData);
+    setEstimateDetails(null);
+    try {
+      sessionStorage.removeItem("cleaner_manchester_calculator_booking");
+      localStorage.removeItem("cleaner_manchester_calculator_booking");
+    } catch {}
     setErrors({});
     setSubmitStatus("idle");
     setStatusMessage("");
@@ -258,6 +460,26 @@ export const QuoteForm: React.FC = () => {
             <span className="text-[#65727E]">Property Type:</span>
             <span className="font-bold text-[#142B3B]">{submittedPayload.propertyType}</span>
           </div>
+          {submittedPayload.bedrooms && (
+            <div className="flex justify-between border-b border-[#E5E9ED]/70 pb-2">
+              <span className="text-[#65727E]">Bedrooms:</span>
+              <span className="font-bold text-[#142B3B]">{submittedPayload.bedrooms}</span>
+            </div>
+          )}
+          {submittedPayload.bathrooms && (
+            <div className="flex justify-between border-b border-[#E5E9ED]/70 pb-2">
+              <span className="text-[#65727E]">Bathrooms:</span>
+              <span className="font-bold text-[#142B3B]">{submittedPayload.bathrooms}</span>
+            </div>
+          )}
+          {estimateDetails && (
+            <div className="flex justify-between border-b border-[#E5E9ED]/70 pb-2">
+              <span className="text-[#65727E]">Estimated Rate:</span>
+              <span className="font-bold text-emerald-700">
+                £{estimateDetails.price} {estimateDetails.frequency === "one-off" ? "(One-off)" : `/ visit (${estimateDetails.frequencyText})`}
+              </span>
+            </div>
+          )}
           <div className="flex justify-between border-b border-[#E5E9ED]/70 pb-2">
             <span className="text-[#65727E]">Contact Phone:</span>
             <span className="font-bold text-[#142B3B]">{submittedPayload.telephone}</span>
@@ -324,6 +546,57 @@ export const QuoteForm: React.FC = () => {
           Complete the details below for a tailored, obligation-free cleaning quote. We respond directly to verify availability.
         </p>
       </div>
+
+      {/* Dynamic Instant Estimate Banner from Calculator */}
+      {estimateDetails && (
+        <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-xl bg-[#14355F] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Zap className="w-6 h-6 fill-white text-white" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-black text-[#14355F] uppercase tracking-wider">
+                  Calculator Estimate Applied
+                </span>
+                <span className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />
+                  Auto-Filled Below
+                </span>
+              </div>
+              <p className="text-sm font-black text-slate-900 mt-1">
+                {estimateDetails.service} &bull; {estimateDetails.bedroomsText} &bull; {estimateDetails.bathroomsText} &bull; {estimateDetails.frequencyText}
+              </p>
+              <p className="text-xs text-slate-600 mt-0.5">
+                {isOffice
+                  ? "Workstations, breakout kitchen & washrooms included."
+                  : isTenancy
+                  ? "Full check-out inventory standard & inside cupboards included."
+                  : isDeep
+                  ? "Top-to-bottom limescale descaling & grease scrub included."
+                  : isDomestic
+                  ? "Eco-friendly supplies & DBS-vetted domestic cleaner included."
+                  : "Eco-friendly supplies & DBS-vetted cleaner included."}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex sm:flex-col items-baseline sm:items-end justify-between border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200 shrink-0">
+            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              Estimated Price
+            </span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-3xl font-black text-slate-900">£{estimateDetails.price}</span>
+              <span className="text-xs font-bold text-slate-600">
+                {estimateDetails.frequency === "one-off" ? "/ clean" : "/ visit"}
+              </span>
+            </div>
+            <span className="text-[11px] font-bold text-emerald-700 mt-0.5">
+              ⚡ Saves ~{estimateDetails.hours} hrs free time
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Submission Error Banner */}
       {submitStatus === "error" && (
@@ -459,16 +732,16 @@ export const QuoteForm: React.FC = () => {
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Cleaning Service Dropdown */}
+            {/* 1. Cleaning Service Dropdown */}
             <div>
               <label htmlFor="service" className="block text-xs font-bold text-[#142B3B] mb-1.5">
-                Required Cleaning Service <span className="text-red-500">*</span>
+                1. Required Cleaning Service <span className="text-red-500">*</span>
               </label>
               <select
                 id="service"
                 name="service"
                 value={formData.service}
-                onChange={handleInputChange}
+                onChange={(e) => handleServiceChange(e.target.value)}
                 className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-[#202A33] focus:outline-none focus:ring-2 transition-all ${
                   errors.service
                     ? "border-red-400 focus:ring-red-400 bg-red-50/20"
@@ -527,6 +800,72 @@ export const QuoteForm: React.FC = () => {
               )}
             </div>
 
+            {/* 2. Category-Wise Bedrooms / Workspaces */}
+            <div>
+              <label htmlFor="bedrooms" className="block text-xs font-bold text-[#142B3B] mb-1.5">
+                {isOffice ? "2. Office Rooms / Workspaces" : "2. Bedrooms"} <span className="text-slate-400 font-normal">(Optional)</span>
+              </label>
+              <select
+                id="bedrooms"
+                name="bedrooms"
+                value={formData.bedrooms}
+                onChange={handleInputChange}
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#E5E9ED] bg-[#F7F9FA] text-sm text-[#202A33] focus:outline-none focus:ring-2 focus:ring-[#43A66B]"
+              >
+                {isOffice ? (
+                  <>
+                    <option value="">-- Not specified / Open Plan --</option>
+                    <option value="1 Room (1-5 Desks)">1 Room / Studio (1-5 Desks)</option>
+                    <option value="2 Office Rooms (6-12 Desks)">2 Office Rooms (6-12 Desks)</option>
+                    <option value="3 Office Rooms (13-20 Desks)">3 Office Rooms (13-20 Desks)</option>
+                    <option value="4 Office Rooms (21-35 Desks)">4 Office Rooms (21-35 Desks)</option>
+                    <option value="5+ Office Rooms (35+ Desks)">5+ Office Rooms / Entire Floor (35+ Desks)</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="">-- Not specified / Studio --</option>
+                    <option value="Studio / 1 Bed">Studio / 1 Bedroom</option>
+                    <option value="2 Bedrooms">2 Bedrooms</option>
+                    <option value="3 Bedrooms">3 Bedrooms</option>
+                    <option value="4 Bedrooms">4 Bedrooms</option>
+                    <option value="5+ Bedrooms">5+ Bedrooms</option>
+                  </>
+                )}
+              </select>
+            </div>
+
+            {/* 3. Category-Wise Bathrooms / Restrooms */}
+            <div>
+              <label htmlFor="bathrooms" className="block text-xs font-bold text-[#142B3B] mb-1.5">
+                {isOffice ? "3. Staff Restrooms / Washrooms" : "3. Bathrooms / En-suites"} <span className="text-slate-400 font-normal">(Optional)</span>
+              </label>
+              <select
+                id="bathrooms"
+                name="bathrooms"
+                value={formData.bathrooms}
+                onChange={handleInputChange}
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#E5E9ED] bg-[#F7F9FA] text-sm text-[#202A33] focus:outline-none focus:ring-2 focus:ring-[#43A66B]"
+              >
+                {isOffice ? (
+                  <>
+                    <option value="">-- Not specified --</option>
+                    <option value="1 Restroom">1 Restroom</option>
+                    <option value="2 Restrooms">2 Restrooms</option>
+                    <option value="3 Restrooms">3 Restrooms</option>
+                    <option value="4+ Restrooms">4+ Restrooms</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="">-- Not specified --</option>
+                    <option value="1 Bathroom">1 Bathroom</option>
+                    <option value="2 Bathrooms">2 Bathrooms</option>
+                    <option value="3 Bathrooms">3 Bathrooms</option>
+                    <option value="4+ Bathrooms">4+ Bathrooms</option>
+                  </>
+                )}
+              </select>
+            </div>
+
             {/* Manchester Postcode */}
             <div>
               <label htmlFor="postcode" className="block text-xs font-bold text-[#142B3B] mb-1.5">
@@ -569,46 +908,72 @@ export const QuoteForm: React.FC = () => {
                 className="w-full px-3.5 py-2.5 rounded-lg border border-[#E5E9ED] bg-[#F7F9FA] text-sm text-[#202A33] focus:outline-none focus:ring-2 focus:ring-[#43A66B] focus:border-transparent"
               />
             </div>
+          </div>
 
-            {/* Bedrooms (Optional) */}
-            <div>
-              <label htmlFor="bedrooms" className="block text-xs font-bold text-[#142B3B] mb-1.5">
-                Bedrooms <span className="text-slate-400 font-normal">(Optional)</span>
+          {/* 4. Interactive Frequency & Savings Selector */}
+          <div className="pt-2">
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs font-bold text-[#142B3B] uppercase tracking-wider">
+                4. Frequency & Savings
               </label>
-              <select
-                id="bedrooms"
-                name="bedrooms"
-                value={formData.bedrooms}
-                onChange={handleInputChange}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#E5E9ED] bg-[#F7F9FA] text-sm text-[#202A33] focus:outline-none focus:ring-2 focus:ring-[#43A66B]"
-              >
-                <option value="">-- Not specified / Studio --</option>
-                <option value="Studio / 1 Bed">Studio / 1 Bedroom</option>
-                <option value="2 Bedrooms">2 Bedrooms</option>
-                <option value="3 Bedrooms">3 Bedrooms</option>
-                <option value="4 Bedrooms">4 Bedrooms</option>
-                <option value="5+ Bedrooms">5+ Bedrooms</option>
-              </select>
+              {formData.frequency === "weekly" && (
+                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  15% Recurring Discount Applied
+                </span>
+              )}
+              {formData.frequency === "fortnightly" && (
+                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  10% Recurring Discount Applied
+                </span>
+              )}
+              {formData.frequency === "one-off" && (
+                <span className="text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                  {isTenancy ? "Move-Out Standard Clean" : isDeep ? "One-Off Deep Clean" : "Single Clean"}
+                </span>
+              )}
             </div>
 
-            {/* Bathrooms (Optional) */}
-            <div>
-              <label htmlFor="bathrooms" className="block text-xs font-bold text-[#142B3B] mb-1.5">
-                Bathrooms / En-suites <span className="text-slate-400 font-normal">(Optional)</span>
-              </label>
-              <select
-                id="bathrooms"
-                name="bathrooms"
-                value={formData.bathrooms}
-                onChange={handleInputChange}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#E5E9ED] bg-[#F7F9FA] text-sm text-[#202A33] focus:outline-none focus:ring-2 focus:ring-[#43A66B]"
+            <div className="grid grid-cols-3 gap-3">
+              <button
+                type="button"
+                onClick={() => handleFrequencyChange("weekly")}
+                className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center justify-center cursor-pointer ${
+                  formData.frequency === "weekly"
+                    ? "bg-slate-50 border-[#14355F] text-[#14355F] ring-2 ring-[#14355F] shadow-xs"
+                    : "bg-[#F7F9FA] border-[#E5E9ED] text-slate-700 hover:bg-slate-100"
+                }`}
               >
-                <option value="">-- Not specified --</option>
-                <option value="1 Bathroom">1 Bathroom</option>
-                <option value="2 Bathrooms">2 Bathrooms</option>
-                <option value="3 Bathrooms">3 Bathrooms</option>
-                <option value="4+ Bathrooms">4+ Bathrooms</option>
-              </select>
+                <span className="text-sm font-extrabold text-slate-900">Weekly</span>
+                <span className="text-[11px] text-emerald-600 font-black mt-0.5">Save 15%</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleFrequencyChange("fortnightly")}
+                className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center justify-center cursor-pointer ${
+                  formData.frequency === "fortnightly"
+                    ? "bg-slate-50 border-[#14355F] text-[#14355F] ring-2 ring-[#14355F] shadow-xs"
+                    : "bg-[#F7F9FA] border-[#E5E9ED] text-slate-700 hover:bg-slate-100"
+                }`}
+              >
+                <span className="text-sm font-extrabold text-slate-900">Fortnightly</span>
+                <span className="text-[11px] text-emerald-600 font-black mt-0.5">Save 10%</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleFrequencyChange("one-off")}
+                className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center justify-center cursor-pointer ${
+                  formData.frequency === "one-off"
+                    ? "bg-slate-50 border-[#14355F] text-[#14355F] ring-2 ring-[#14355F] shadow-xs"
+                    : "bg-[#F7F9FA] border-[#E5E9ED] text-slate-700 hover:bg-slate-100"
+                }`}
+              >
+                <span className="text-sm font-extrabold text-slate-900">One-Off</span>
+                <span className="text-[11px] text-slate-500 font-medium mt-0.5">
+                  {isTenancy ? "Move-Out" : isDeep ? "Deep Clean" : "Standard"}
+                </span>
+              </button>
             </div>
           </div>
 

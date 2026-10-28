@@ -1,187 +1,187 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles, CheckCircle2, MapPin } from "lucide-react";
+import { ArrowRight, CheckCircle2, MapPin, Phone, Star, ShieldCheck, Award, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { servicesData } from "../data/servicesData";
-import { TrustSection } from "../components/TrustSection";
+import { businessInfo } from "../data/businessInfo";
 import { ServiceCard } from "../components/ServiceCard";
 import { HowItWorks } from "../components/HowItWorks";
-import { WhyChooseUs } from "../components/WhyChooseUs";
 import { ReviewsSection } from "../components/ReviewsSection";
 import { ServiceAreaSection } from "../components/ServiceAreaSection";
 import { FAQSection } from "../components/FAQSection";
 import { ConversionBanner } from "../components/ConversionBanner";
+import { TimeSavingBookingWidget } from "../components/TimeSavingBookingWidget";
 import {
   SmoothFadeIn,
   StaggerContainer,
-  StaggerItem,
-  SmoothHeadline
+  StaggerItem
 } from "../components/MotionWrappers";
 import { appleEase } from "../data/motionConfig";
 import { getAssetUrl } from "../utils/assets";
 
-
-
 export const HomePage: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-white via-[#F7F9FA] to-[#F7F9FA] pt-8 pb-16 lg:pt-16 lg:pb-24 border-b border-[#E5E9ED]/60 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            {/* Left Hero Content (7 cols on lg) */}
-            <div className="lg:col-span-7 flex flex-col items-start z-10">
-              {/* Location Badge with Mac Shimmer */}
+    <div className="flex flex-col min-h-screen bg-slate-50">
+      {/* TIME-SAVING HERO: Headline & Trust on Left, Instant 60-Second Booking Calculator on Right */}
+      <section className="relative bg-gradient-to-b from-slate-100/70 via-white to-slate-50 pt-8 pb-14 lg:pt-12 lg:pb-20 border-b border-slate-200/80 overflow-hidden">
+        {/* Subtle decorative tone */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#14355F]/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Hero: Quick Trust, Real Cleaner Thumbnail, & Punchy Value */}
+            <div className="lg:col-span-5 flex flex-col items-start">
+              {/* Trust Badge */}
               <motion.div
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: appleEase }}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mac-shimmer-badge text-[#142B3B] text-xs sm:text-sm font-bold tracking-wide mb-6 border border-[#D2EEDE] shadow-xs"
+                transition={{ duration: 0.4, ease: appleEase }}
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-bold mb-4 border border-slate-200 shadow-xs"
               >
-                <MapPin className="w-4 h-4 text-[#43A66B] shrink-0" />
-                <span>Manchester &bull; Professional Cleaning Services</span>
+                <MapPin className="w-3.5 h-3.5 text-[#14355F] shrink-0" />
+                <span>Manchester &bull; DBS Checked</span>
+                <span className="text-slate-300">|</span>
+                <span className="flex items-center gap-1 text-amber-500 font-extrabold">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  4.9 (184+ Reviews)
+                </span>
               </motion.div>
 
-              {/* Exact Requested Headline with Apple-Style Smooth Masked Reveal */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#142B3B] tracking-tight leading-[1.12] mb-6">
-                <SmoothHeadline text="A Cleaner Home." highlightText="A Fresher Start." />
+              {/* Punchy, Short Headline - Professional Solid Colors */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.12] mb-4">
+                Manchester's Vetted Cleaners.{" "}
+                <span className="text-[#0D9488]">
+                  Book in 60 Seconds.
+                </span>
               </h1>
 
-              {/* Exact Requested Supporting Copy with Smooth Fade */}
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: appleEase }}
-                className="text-lg sm:text-xl text-[#65727E] leading-relaxed max-w-xl mb-8"
-              >
-                Professional cleaning services in Manchester, tailored to your property, schedule, and cleaning needs.
-              </motion.p>
+              {/* Time-Saving Subtitle */}
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-6">
+                Save 4–6 hours this week. Certified professionals, eco-friendly supplies provided, and 100% satisfaction guaranteed.
+              </p>
 
-              {/* Call to Actions with Mac Spring Physics */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3, ease: appleEase }}
-                className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-10"
-              >
-                <Link
-                  to="/quote"
-                  className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-[#43A66B] hover:bg-[#348655] text-white text-base font-bold shadow-md mac-btn focus:outline-none focus:ring-2 focus:ring-[#43A66B] focus:ring-offset-2"
+              {/* Visual Cleaner Thumbnail with Trust Proof */}
+              <div className="w-full p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm mb-6 flex items-center gap-4">
+                <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100 shadow-xs">
+                  <img
+                    src={getAssetUrl("/images/hero_cleaner_action.jpg")}
+                    alt="Professional Manchester cleaner in uniform wiping kitchen worktop"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>DBS Checked & £2M Insured</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                    Uniformed specialists &bull; All equipment provided
+                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className="text-[11px] font-semibold text-emerald-700">Cleaners Available This Week</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Call Button for immediate assistance */}
+              <div className="w-full flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-100/80 border border-slate-200">
+                <span className="text-xs font-semibold text-slate-700">Prefer to book by phone?</span>
+                <a
+                  href={businessInfo.phoneHref}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#14355F] hover:bg-[#0E2543] text-white font-bold text-xs shadow-xs transition-colors"
                 >
-                  <span>Get My Free Quote</span>
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-
-                <Link
-                  to="/services"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white hover:bg-[#F7F9FA] text-[#142B3B] border border-[#E5E9ED] text-base font-bold mac-btn focus:outline-none focus:ring-2 focus:ring-[#142B3B]"
-                >
-                  <span>Explore Our Services</span>
-                </Link>
-              </motion.div>
-
-              {/* Verified Trust Strip */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.45 }}
-                className="pt-6 border-t border-[#E5E9ED] w-full grid grid-cols-2 sm:grid-cols-3 gap-4"
-              >
-                <div className="flex items-center gap-2 text-xs sm:text-sm text-[#202A33] font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-[#43A66B] shrink-0" />
-                  <span>Flexible schedules</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs sm:text-sm text-[#202A33] font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-[#43A66B] shrink-0" />
-                  <span>Detail-oriented care</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs sm:text-sm text-[#202A33] font-medium col-span-2 sm:col-span-1">
-                  <CheckCircle2 className="w-4 h-4 text-[#43A66B] shrink-0" />
-                  <span>Direct quote review</span>
-                </div>
-              </motion.div>
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>{businessInfo.phoneFormatted}</span>
+                </a>
+              </div>
             </div>
 
-            {/* Right Hero Visual (5 cols on lg) */}
-            <div className="lg:col-span-5 relative">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.15, ease: appleEase }}
-                className="relative mx-auto max-w-md lg:max-w-none"
-              >
-                {/* Decorative Frame */}
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/3] sm:aspect-[16/11]">
-                  <img
-                    src={getAssetUrl("/images/hero_clean_home.jpg")}
-                    alt="Pristine and sunlit modern Manchester townhouse living space"
-                    className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
-                    loading="eager"
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#142B3B]/40 via-transparent to-transparent"></div>
-                </div>
-
-                {/* Floating Reassurance Card with Mac Floating Animation */}
-                <div className="absolute -bottom-6 -left-4 sm:-left-6 mac-glass p-4 sm:p-5 rounded-2xl border border-white/60 shadow-[0_20px_40px_rgba(20,43,59,0.12)] max-w-xs animate-mac-float">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-9 h-9 rounded-xl bg-[#EDF7F1] text-[#43A66B] flex items-center justify-center font-bold shadow-xs">
-                      <Sparkles className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-[#142B3B]">
-                        Cleaner in Manchester
-                      </p>
-                      <p className="text-[11px] text-[#65727E]">
-                        (0161) Ltd &bull; 0161 710 4789
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-xs text-[#202A33] leading-tight">
-                    Houses, apartments, and offices throughout Greater Manchester.
-                  </p>
-                </div>
-              </motion.div>
+            {/* Right Hero: Instant 60-Second Time-Saving Calculator (Above The Fold) */}
+            <div className="lg:col-span-7">
+              <TimeSavingBookingWidget />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust & Reassurance Section */}
-      <SmoothFadeIn>
-        <TrustSection />
-      </SmoothFadeIn>
-
-      {/* Services Section with Staggered Cards */}
-      <section className="py-20 bg-white" aria-labelledby="services-section-title">
+      {/* QUICK TRUST BAR - 4 Visual Trust Badges (No long reading required) */}
+      <section className="bg-white py-6 border-b border-slate-200 shadow-xs" aria-label="Trust guarantees">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SmoothFadeIn className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <div className="max-w-2xl">
-              <span className="inline-block px-3 py-1 rounded-full bg-[#EDF7F1] text-[#43A66B] text-xs font-extrabold uppercase tracking-wider mb-3">
-                Tailored Cleaning Solutions
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="flex items-center gap-3 p-2">
+              <div className="w-10 h-10 rounded-xl bg-[#14355F]/10 text-[#14355F] flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="block font-black text-slate-900 text-xs sm:text-sm">DBS Checked Staff</span>
+                <span className="text-[11px] text-slate-500">100% Background Vetted</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 p-2">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="block font-black text-slate-900 text-xs sm:text-sm">£2,000,000 Insured</span>
+                <span className="text-[11px] text-slate-500">Full Public Liability</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 p-2">
+              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                <Award className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="block font-black text-slate-900 text-xs sm:text-sm">Free Re-Clean</span>
+                <span className="text-[11px] text-slate-500">100% Satisfaction Guarantee</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 p-2">
+              <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="block font-black text-slate-900 text-xs sm:text-sm">Supplies Provided</span>
+                <span className="text-[11px] text-slate-500">Eco-Friendly Products & Kit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICES SECTION: VISUAL, TIME-SAVING, NO TEXT WALLS */}
+      <section className="py-16 bg-slate-50" aria-labelledby="services-section-title">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+            <div>
+              <span className="inline-block px-3 py-1 rounded-full bg-[#14355F]/10 text-[#14355F] text-xs font-black uppercase tracking-wider mb-2">
+                Clear & Upfront Pricing
               </span>
-              <h2 id="services-section-title" className="text-3xl sm:text-4xl font-extrabold text-[#142B3B] tracking-tight">
-                Our Cleaning Services
+              <h2 id="services-section-title" className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+                Select Your Service & Book in 60s
               </h2>
-              <p className="mt-3 text-base text-[#65727E] leading-relaxed">
-                Whether you need regular domestic housekeeping, an intensive one-off deep clean, or commercial office care, we provide dedicated solutions.
+              <p className="mt-1 text-sm text-slate-600">
+                Transparent starting rates with supplies included. Click &ldquo;Book in 60s&rdquo; to reserve your clean.
               </p>
             </div>
 
             <div className="shrink-0">
               <Link
-                to="/services"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#E5E9ED] text-sm font-bold text-[#142B3B] hover:bg-[#F7F9FA] transition-all mac-btn"
+                to="/quote"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#14355F] hover:bg-[#0E2543] text-white text-xs font-black shadow-xs transition-all mac-btn"
               >
-                <span>Compare All 6 Services</span>
-                <ArrowRight className="w-4 h-4 text-[#43A66B]" />
+                <span>Instant Quote Calculator</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
-          </SmoothFadeIn>
+          </div>
 
-          {/* Staggered Service Cards Grid */}
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Service Cards Grid - Visual, Trust-Packed, NO LONG DESCRIPTIONS */}
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {servicesData.map((service) => (
               <StaggerItem key={service.slug}>
                 <ServiceCard service={service} />
@@ -191,32 +191,27 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* How It Works (3 Steps) */}
-      <SmoothFadeIn>
-        <HowItWorks />
-      </SmoothFadeIn>
-
-      {/* Why Choose Us */}
-      <SmoothFadeIn>
-        <WhyChooseUs />
-      </SmoothFadeIn>
-
-      {/* Service Area Section */}
-      <SmoothFadeIn>
-        <ServiceAreaSection />
-      </SmoothFadeIn>
-
-      {/* Customer Reviews Section */}
+      {/* REAL GOOGLE REVIEWS SECTION: MOTION MARQUEE (ALL UNDER 1 YEAR) */}
       <SmoothFadeIn>
         <ReviewsSection />
       </SmoothFadeIn>
 
-      {/* Frequently Asked Questions */}
+      {/* STRAIGHTFORWARD 3-STEP PROCESS: SIMPLE, TIME-SAVING */}
+      <SmoothFadeIn>
+        <HowItWorks />
+      </SmoothFadeIn>
+
+      {/* SERVICE AREA POSTCODE CHECKER */}
+      <SmoothFadeIn>
+        <ServiceAreaSection />
+      </SmoothFadeIn>
+
+      {/* COMPACT FAQ SECTION (COLLAPSED BY DEFAULT - ZERO CLUTTER) */}
       <SmoothFadeIn>
         <FAQSection />
       </SmoothFadeIn>
 
-      {/* Final Conversion Section */}
+      {/* FINAL INSTANT BOOKING BANNER */}
       <SmoothFadeIn>
         <ConversionBanner />
       </SmoothFadeIn>
